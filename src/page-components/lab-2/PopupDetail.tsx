@@ -10,7 +10,10 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { IndustrialFacilitiesData } from "src/@types/industrial-facilities";
+import {
+  IndustrialFacilitiesData,
+  MonitoringSubsystem,
+} from "src/@types/industrial-facilities";
 
 export const PopupDetail: FC<IndustrialFacilitiesData> = ({
   name,
@@ -20,7 +23,9 @@ export const PopupDetail: FC<IndustrialFacilitiesData> = ({
   statistics,
 }) => {
   const chartColor =
-    monitoringSubsystem === "Радіаційний фон" ? "#FF5733" : "#4CAF50";
+    monitoringSubsystem === MonitoringSubsystem.RADIATION_BACKGROUND
+      ? "#FF5733"
+      : "#4CAF50";
 
   return (
     <div className="flex flex-col gap-2">
@@ -43,7 +48,7 @@ export const PopupDetail: FC<IndustrialFacilitiesData> = ({
 
       <div className="mt-4">
         <span className="font-semibold">
-          {monitoringSubsystem === "Радіаційний фон"
+          {monitoringSubsystem === MonitoringSubsystem.RADIATION_BACKGROUND
             ? "Рівень радіації (мкЗв/год)"
             : "Якість повітря (умовні одиниці)"}
         </span>

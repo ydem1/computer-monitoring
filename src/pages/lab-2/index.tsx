@@ -1,20 +1,46 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
+import { MapSelectDropdownList } from "src/page-components/lab-2/MapSelectDropdownList";
+import { MAPS_OPTIONS } from "src/page-components/lab-2/MapSelectDropdownList/constants";
 import { PopupDetail } from "src/page-components/lab-2/PopupDetail";
 import { LabDescription } from "src/components/LabDescription";
 import { LAB_2 } from "src/components/LabDescription/constants";
 import { PageWrapper } from "src/components/Layouts/PageWrapper";
 import { Map } from "src/components/Map";
-import { IndustrialFacilities } from "src/components/Map/constants";
+import { INDUSTRIAL_FACILITIES } from "src/components/Map/constants";
 import { Notice } from "src/components/Notice";
 
-const Lab2: FC = () => (
-  <PageWrapper mainClassName="pt-25 pb-10">
-    <section className="container flex flex-col gap-10">
-      <Notice />
-      <LabDescription {...LAB_2} />
-      <Map industrialFacilities={IndustrialFacilities} content={PopupDetail} />
-    </section>
-  </PageWrapper>
-);
+const Lab2: FC = () => {
+  const [activeOption, setActiveOption] = useState(MAPS_OPTIONS[0]);
+
+  const industrialFacilitiesCurrent = INDUSTRIAL_FACILITIES.filter((item) => {
+    if (activeOption.value === 0) {
+      return true;
+    }
+
+    return item.monitoringSubsystem === activeOption.value;
+  });
+
+  return (
+    <PageWrapper mainClassName="pt-25 pb-10">
+      <section className="container flex flex-col gap-10">
+        <Notice />
+        <LabDescription {...LAB_2} />
+
+        <div className="flex flex-col items-end gap-2">
+          <MapSelectDropdownList
+            options={MAPS_OPTIONS}
+            activeOption={activeOption}
+            setOption={setActiveOption}
+          />
+
+          <Map
+            industrialFacilities={industrialFacilitiesCurrent}
+            content={PopupDetail}
+          />
+        </div>
+      </section>
+    </PageWrapper>
+  );
+};
 
 export default Lab2;

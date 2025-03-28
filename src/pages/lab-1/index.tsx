@@ -4,7 +4,7 @@ import { LabDescription } from "src/components/LabDescription";
 import { LAB_1 } from "src/components/LabDescription/constants";
 import { PageWrapper } from "src/components/Layouts/PageWrapper";
 import { Map } from "src/components/Map";
-import { IndustrialFacilities } from "src/components/Map/constants";
+import { INDUSTRIAL_FACILITIES } from "src/components/Map/constants";
 import { Notice } from "src/components/Notice";
 
 const Lab1: FC = () => (
@@ -12,7 +12,7 @@ const Lab1: FC = () => (
     <section className="container flex flex-col gap-10">
       <Notice />
       <LabDescription {...LAB_1} />
-      <Map industrialFacilities={IndustrialFacilities} content={PopupDetail} />
+      <Map industrialFacilities={INDUSTRIAL_FACILITIES} content={PopupDetail} />
     </section>
   </PageWrapper>
 );
