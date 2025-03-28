@@ -1,12 +1,16 @@
 import React, { FC } from "react";
 import { useRoutes } from "react-router-dom";
-import { Home, NotFound } from "src/pages";
+import { Home, Lab1, NotFound } from "src/pages";
 import { PATHNAMES } from "src/constants/routes";
 
 const ROUTES = [
   {
     element: <Home />,
     path: PATHNAMES.HOME,
+  },
+  {
+    element: <Lab1 />,
+    path: PATHNAMES.Lab_1,
   },
   {
     element: <NotFound />,
