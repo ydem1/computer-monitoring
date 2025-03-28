@@ -1,12 +1,12 @@
 import React, { FC } from "react";
-import { useRoutes } from "react-router-dom";
-import { Home, Lab1, Lab2, NotFound } from "src/pages";
+import { Navigate, useRoutes } from "react-router-dom";
+import { Lab1, Lab2, NotFound } from "src/pages";
 import { PATHNAMES } from "src/constants/routes";
 
 const ROUTES = [
   {
-    element: <Home />,
     path: PATHNAMES.HOME,
+    element: <Navigate to={PATHNAMES.Lab_1} replace />,
   },
   {
     element: <Lab1 />,
