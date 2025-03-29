@@ -17,7 +17,7 @@ export const Map: FC<Props> = ({
   industrialFacilities,
   content: Content,
 }) => (
-  <div className={cn("relative h-[80vh] w-full", className)}>
+  <div className={cn("relative h-screen w-full", className)}>
     <MapContainer className="z-0 h-full w-full" center={CENTER_MAP} zoom={ZOOM}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
