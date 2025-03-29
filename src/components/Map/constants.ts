@@ -1,6 +1,8 @@
 import {
+  AirConditionIndicators,
   IndustrialFacilitiesData,
   MonitoringSubsystem,
+  RadiationBackgroundIndicators,
 } from "src/@types/industrial-facilities";
 
 // Kyiv
@@ -16,10 +18,14 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
       "Машинобудівне підприємство. Викиди пилу та промислових газів.",
     monitoringSubsystem: MonitoringSubsystem.AIR_CONDITION,
     indicators: [
-      { name: "Викиди CO₂", value: "150 т/рік" },
-      { name: "Викиди NOₓ", value: "40 т/рік" },
-      { name: "Енергоспоживання", value: "20 МВт/рік" },
-      { name: "Ефективність", value: "70%" },
+      { name: AirConditionIndicators.CO2_EMISSIONS, value: 150, unit: "т/рік" },
+      { name: AirConditionIndicators.NOX_EMISSIONS, value: 40, unit: "т/рік" },
+      {
+        name: AirConditionIndicators.ENERGY_CONSUMPTION,
+        value: 20,
+        unit: "МВт/рік",
+      },
+      { name: AirConditionIndicators.EFFICIENCY, value: 70, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 35 },
@@ -41,10 +47,18 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
     description: "Спалює тверді побутові відходи. Викиди CO₂, NOₓ, діоксинів.",
     monitoringSubsystem: MonitoringSubsystem.AIR_CONDITION,
     indicators: [
-      { name: "Викиди CO₂", value: "300 т/рік" },
-      { name: "Викиди діоксинів", value: "5 т/рік" },
-      { name: "Енергоспоживання", value: "50 МВт/рік" },
-      { name: "Ефективність", value: "85%" },
+      { name: AirConditionIndicators.CO2_EMISSIONS, value: 300, unit: "т/рік" },
+      {
+        name: AirConditionIndicators.DIOXINS_EMISSIONS,
+        value: 5,
+        unit: "т/рік",
+      },
+      {
+        name: AirConditionIndicators.ENERGY_CONSUMPTION,
+        value: 50,
+        unit: "МВт/рік",
+      },
+      { name: AirConditionIndicators.EFFICIENCY, value: 85, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 28 },
@@ -67,9 +81,17 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
       "Виконує дослідження з ядерної енергетики, потребує контролю радіаційного фону.",
     monitoringSubsystem: MonitoringSubsystem.RADIATION_BACKGROUND,
     indicators: [
-      { name: "Фонова доза", value: "0.12 мкЗв/год" },
-      { name: "Енергоспоживання", value: "30 МВт/рік" },
-      { name: "Ефективність", value: "90%" },
+      {
+        name: RadiationBackgroundIndicators.BACKGROUND_DOSE,
+        value: 0.12,
+        unit: "мкЗв/год",
+      },
+      {
+        name: RadiationBackgroundIndicators.ENERGY_CONSUMPTION,
+        value: 30,
+        unit: "МВт/рік",
+      },
+      { name: RadiationBackgroundIndicators.EFFICIENCY, value: 90, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 0.1 },
@@ -91,10 +113,18 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
     description: "Переробка макулатури, значні викиди пилу в атмосферу.",
     monitoringSubsystem: MonitoringSubsystem.AIR_CONDITION,
     indicators: [
-      { name: "Викиди пилу", value: "100 т/рік" },
-      { name: "Викиди CO₂", value: "200 т/рік" },
-      { name: "Енергоспоживання", value: "40 МВт/рік" },
-      { name: "Ефективність", value: "75%" },
+      {
+        name: AirConditionIndicators.DUST_EMISSIONS,
+        value: 100,
+        unit: "т/рік",
+      },
+      { name: AirConditionIndicators.CO2_EMISSIONS, value: 200, unit: "т/рік" },
+      {
+        name: AirConditionIndicators.ENERGY_CONSUMPTION,
+        value: 40,
+        unit: "МВт/рік",
+      },
+      { name: AirConditionIndicators.EFFICIENCY, value: 75, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 20 },
@@ -116,10 +146,18 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
     description: "Забезпечує теплопостачання, викиди парникових газів.",
     monitoringSubsystem: MonitoringSubsystem.AIR_CONDITION,
     indicators: [
-      { name: "Викиди CO₂", value: "500 т/рік" },
-      { name: "Викиди SO₂", value: "50 т/рік" },
-      { name: "Енергоспоживання", value: "60 МВт/рік" },
-      { name: "Ефективність", value: "80%" },
+      {
+        name: AirConditionIndicators.CO2_EMISSIONS,
+        value: 500,
+        unit: "т/рік",
+      },
+      { name: AirConditionIndicators.SO2_EMISSIONS, value: 50, unit: "т/рік" },
+      {
+        name: AirConditionIndicators.ENERGY_CONSUMPTION,
+        value: 60,
+        unit: "МВт/рік",
+      },
+      { name: AirConditionIndicators.EFFICIENCY, value: 80, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 15 },
@@ -141,10 +179,18 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
     description: "Теплова електростанція. Основні викиди – CO₂, SO₂, NOₓ.",
     monitoringSubsystem: MonitoringSubsystem.AIR_CONDITION,
     indicators: [
-      { name: "Викиди CO₂", value: "700 т/рік" },
-      { name: "Викиди NOₓ", value: "100 т/рік" },
-      { name: "Енергоспоживання", value: "80 МВт/рік" },
-      { name: "Ефективність", value: "85%" },
+      {
+        name: AirConditionIndicators.CO2_EMISSIONS,
+        value: 700,
+        unit: "т/рік",
+      },
+      { name: AirConditionIndicators.NOX_EMISSIONS, value: 100, unit: "т/рік" },
+      {
+        name: AirConditionIndicators.ENERGY_CONSUMPTION,
+        value: 80,
+        unit: "МВт/рік",
+      },
+      { name: AirConditionIndicators.EFFICIENCY, value: 85, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 50 },
@@ -167,10 +213,22 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
       "Найбільша ТЕЦ Києва, споживає природний газ, значні викиди CO₂.",
     monitoringSubsystem: MonitoringSubsystem.AIR_CONDITION,
     indicators: [
-      { name: "Викиди CO₂", value: "1000 т/рік" },
-      { name: "Викиди NOₓ", value: "150 т/рік" },
-      { name: "Енергоспоживання", value: "100 МВт/рік" },
-      { name: "Ефективність", value: "90%" },
+      {
+        name: AirConditionIndicators.CO2_EMISSIONS,
+        value: 1000,
+        unit: "т/рік",
+      },
+      {
+        name: AirConditionIndicators.NOX_EMISSIONS,
+        value: 150,
+        unit: " т/рік",
+      },
+      {
+        name: AirConditionIndicators.ENERGY_CONSUMPTION,
+        value: 100,
+        unit: "МВт/рік",
+      },
+      { name: AirConditionIndicators.EFFICIENCY, value: 90, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 50 },
@@ -192,10 +250,22 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
     description: "Забезпечує теплом Київ. Основні викиди – CO₂, NOₓ, SO₂.",
     monitoringSubsystem: MonitoringSubsystem.AIR_CONDITION,
     indicators: [
-      { name: "Викиди CO₂", value: "900 т/рік" },
-      { name: "Викиди NOₓ", value: "120 т/рік" },
-      { name: "Енергоспоживання", value: "90 МВт/рік" },
-      { name: "Ефективність", value: "88%" },
+      {
+        name: AirConditionIndicators.CO2_EMISSIONS,
+        value: 900,
+        unit: "т/рік",
+      },
+      {
+        name: AirConditionIndicators.NOX_EMISSIONS,
+        value: 120,
+        unit: "т/рік",
+      },
+      {
+        name: AirConditionIndicators.ENERGY_CONSUMPTION,
+        value: 90,
+        unit: "МВт/рік",
+      },
+      { name: AirConditionIndicators.EFFICIENCY, value: 88, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 50 },
@@ -218,9 +288,17 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
       "Хімічне виробництво, контроль викидів у повітря та можливих радіаційних матеріалів.",
     monitoringSubsystem: MonitoringSubsystem.RADIATION_BACKGROUND,
     indicators: [
-      { name: "Фонова доза", value: "0.15 мкЗв/год" },
-      { name: "Енергоспоживання", value: "25 МВт/рік" },
-      { name: "Ефективність", value: "92%" },
+      {
+        name: RadiationBackgroundIndicators.BACKGROUND_DOSE,
+        value: 0.15,
+        unit: "мкЗв/год",
+      },
+      {
+        name: RadiationBackgroundIndicators.ENERGY_CONSUMPTION,
+        value: 25,
+        unit: "МВт/рік",
+      },
+      { name: RadiationBackgroundIndicators.EFFICIENCY, value: 92, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 50 },
@@ -243,10 +321,22 @@ export const INDUSTRIAL_FACILITIES: IndustrialFacilitiesData[] = [
       "Виробництво та ремонт вагонів. Викиди важких металів та аерозолів у повітря.",
     monitoringSubsystem: MonitoringSubsystem.AIR_CONDITION,
     indicators: [
-      { name: "Викиди важких металів", value: "10 т/рік" },
-      { name: "Викиди CO₂", value: "100 т/рік" },
-      { name: "Енергоспоживання", value: "35 МВт/рік" },
-      { name: "Ефективність", value: "78%" },
+      {
+        name: AirConditionIndicators.HEAVY_METALS_EMISSIONS,
+        value: 10,
+        unit: "т/рік",
+      },
+      {
+        name: AirConditionIndicators.CO2_EMISSIONS,
+        value: 100,
+        unit: " т/рік",
+      },
+      {
+        name: AirConditionIndicators.ENERGY_CONSUMPTION,
+        value: 35,
+        unit: "МВт/рік",
+      },
+      { name: AirConditionIndicators.EFFICIENCY, value: 78, unit: "%" },
     ],
     statistics: [
       { hour: "08:00", value: 50 },

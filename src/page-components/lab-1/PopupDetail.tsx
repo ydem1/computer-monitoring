@@ -19,7 +19,7 @@ export const PopupDetail: FC<IndustrialFacilitiesData> = ({
       <ul className="list-disc pl-4">
         {indicators.map((indicator, index) => (
           <li key={index} className="text-sm">
-            <strong>{indicator.name}:</strong> {indicator.value}
+            <strong>{indicator.name}:</strong> {indicator.value} {indicator.unit}
           </li>
         ))}
       </ul>
