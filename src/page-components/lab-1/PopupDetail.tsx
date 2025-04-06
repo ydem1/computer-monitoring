@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import "leaflet/dist/leaflet.css";
-import { IndustrialFacilitiesData } from "src/@types/industrial-facilities";
+import { IndustrialFacilitiesDataLab1 } from "src/@types/industrial-facilities";
 
-export const PopupDetail: FC<IndustrialFacilitiesData> = ({
+export const PopupDetail: FC<IndustrialFacilitiesDataLab1> = ({
   name,
   description,
   monitoringSubsystem,
@@ -19,7 +19,8 @@ export const PopupDetail: FC<IndustrialFacilitiesData> = ({
       <ul className="list-disc pl-4">
         {indicators.map((indicator, index) => (
           <li key={index} className="text-sm">
-            <strong>{indicator.name}:</strong> {indicator.value} {indicator.unit}
+            <strong>{indicator.name}:</strong> {indicator.value}{" "}
+            {indicator.unit}
           </li>
         ))}
       </ul>

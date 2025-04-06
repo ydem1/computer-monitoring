@@ -43,6 +43,14 @@ export type IndustrialFacilitiesData = MarkerProps & {
   name: string;
   description: string;
   monitoringSubsystem: MonitoringSubsystem;
+};
+
+export type IndustrialFacilitiesDataLab1 = IndustrialFacilitiesData & {
+  indicators: Indicator[];
+  statistics: Statistics[];
+};
+
+export type IndustrialFacilitiesDataLab2 = IndustrialFacilitiesData & {
   indicators: Indicator[];
   statistics: Statistics[];
 };

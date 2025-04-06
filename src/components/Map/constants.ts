@@ -1,6 +1,7 @@
 import {
   AirConditionIndicators,
-  IndustrialFacilitiesData,
+  IndustrialFacilitiesDataLab1,
+  IndustrialFacilitiesDataLab2,
   MonitoringSubsystem,
   RadiationBackgroundIndicators,
 } from "src/@types/industrial-facilities";
@@ -9,7 +10,7 @@ import {
 export const CENTER_MAP: [number, number] = [50.45466, 30.5238];
 export const ZOOM = 13;
 
-export const INDUSTRIAL_FACILITIES_LAB_1: IndustrialFacilitiesData[] = [
+export const INDUSTRIAL_FACILITIES_LAB_1: IndustrialFacilitiesDataLab1[] = [
   {
     id: 1,
     position: [50.45268, 30.441119],
@@ -353,7 +354,7 @@ export const INDUSTRIAL_FACILITIES_LAB_1: IndustrialFacilitiesData[] = [
   },
 ];
 
-export const INDUSTRIAL_FACILITIES_LAB_2: IndustrialFacilitiesData[] = [
+export const INDUSTRIAL_FACILITIES_LAB_2: IndustrialFacilitiesDataLab2[] = [
   {
     id: 1,
     position: [50.45268, 30.441119],
