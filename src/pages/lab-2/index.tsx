@@ -6,13 +6,13 @@ import { LabDescription } from "src/components/LabDescription";
 import { LAB_2 } from "src/components/LabDescription/constants";
 import { PageWrapper } from "src/components/Layouts/PageWrapper";
 import { Map } from "src/components/Map";
-import { INDUSTRIAL_FACILITIES } from "src/components/Map/constants";
+import { INDUSTRIAL_FACILITIES_LAB_2 } from "src/components/Map/constants";
 import { Notice } from "src/components/Notice";
 
 const Lab2: FC = () => {
   const [activeOption, setActiveOption] = useState(MAPS_OPTIONS[0]);
 
-  const industrialFacilitiesCurrent = INDUSTRIAL_FACILITIES.filter((item) => {
+  const industrialFacilitiesCurrent = INDUSTRIAL_FACILITIES_LAB_2.filter((item) => {
     if (activeOption.value === 0) {
       return true;
     }
