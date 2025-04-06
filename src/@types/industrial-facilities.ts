@@ -47,7 +47,6 @@ export type IndustrialFacilitiesData = MarkerProps & {
 
 export type IndustrialFacilitiesDataLab1 = IndustrialFacilitiesData & {
   indicators: Indicator[];
-  statistics: Statistics[];
 };
 
 export type IndustrialFacilitiesDataLab2 = IndustrialFacilitiesData & {
