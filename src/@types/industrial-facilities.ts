@@ -1,5 +1,17 @@
 import { MarkerProps } from "react-leaflet";
 
+export enum MonitoringSubsystem {
+  RADIATION_BACKGROUND = "Радіаційний фон",
+  AIR_CONDITION = "Стан повітря",
+}
+
+export type IndustrialFacilitiesData = MarkerProps & {
+  id: number;
+  name: string;
+  description: string;
+  monitoringSubsystem: MonitoringSubsystem;
+};
+
 export enum AirConditionIndicators {
   CO2_EMISSIONS = "Викиди CO₂",
   NOX_EMISSIONS = "Викиди NOₓ",
@@ -17,39 +29,51 @@ export enum RadiationBackgroundIndicators {
   EFFICIENCY = "Ефективність",
 }
 
-export type AirConditionIndicator = {
+// ==== LAB 1 ====
+
+export type AirConditionIndicatorLab1 = {
   name: AirConditionIndicators;
-  value: number;
   unit: string;
+  value: number;
 };
 
-export type RadiationBackgroundIndicator = {
+export type RadiationBackgroundIndicatorLab1 = {
   name: RadiationBackgroundIndicators;
-  value: number;
   unit: string;
+  value: number;
 };
 
-export type Indicator = AirConditionIndicator | RadiationBackgroundIndicator;
-
-export type Statistics = { hour: string; value: number };
-
-export enum MonitoringSubsystem {
-  RADIATION_BACKGROUND = "Радіаційний фон",
-  AIR_CONDITION = "Стан повітря",
-}
-
-export type IndustrialFacilitiesData = MarkerProps & {
-  id: number;
-  name: string;
-  description: string;
-  monitoringSubsystem: MonitoringSubsystem;
-};
+export type IndicatorLab1 =
+  | AirConditionIndicatorLab1
+  | RadiationBackgroundIndicatorLab1;
 
 export type IndustrialFacilitiesDataLab1 = IndustrialFacilitiesData & {
-  indicators: Indicator[];
+  indicators: IndicatorLab1[];
 };
 
+// ==== LAB 2 ====
+
+export type IndicatorValueLab2 = {
+  date: Date;
+  value: number;
+};
+
+export type AirConditionIndicatorLab2 = {
+  name: AirConditionIndicators;
+  unit: string;
+  values: IndicatorValueLab2[];
+};
+
+export type RadiationBackgroundIndicatorLab2 = {
+  name: RadiationBackgroundIndicators;
+  unit: string;
+  values: IndicatorValueLab2[];
+};
+
+export type IndicatorLab2 =
+  | AirConditionIndicatorLab2
+  | RadiationBackgroundIndicatorLab2;
+
 export type IndustrialFacilitiesDataLab2 = IndustrialFacilitiesData & {
-  indicators: Indicator[];
-  statistics: Statistics[];
+  indicators: IndicatorLab2[];
 };

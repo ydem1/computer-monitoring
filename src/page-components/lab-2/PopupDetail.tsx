@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
+import cn from "classnames";
 import "leaflet/dist/leaflet.css";
 import {
   CartesianGrid,
@@ -11,8 +12,10 @@ import {
   YAxis,
 } from "recharts";
 import {
+  AirConditionIndicators,
   IndustrialFacilitiesDataLab2,
   MonitoringSubsystem,
+  RadiationBackgroundIndicators,
 } from "src/@types/industrial-facilities";
 
 export const PopupDetail: FC<IndustrialFacilitiesDataLab2> = ({
@@ -20,12 +23,40 @@ export const PopupDetail: FC<IndustrialFacilitiesDataLab2> = ({
   description,
   monitoringSubsystem,
   indicators,
-  statistics,
 }) => {
   const chartColor =
     monitoringSubsystem === MonitoringSubsystem.RADIATION_BACKGROUND
       ? "#FF5733"
       : "#4CAF50";
+
+  const [selectedIndicatorName, setSelectedIndicatorName] = useState(
+    indicators[0].name
+  );
+
+  const selectedIndicator = indicators.find(
+    (item) => item.name === selectedIndicatorName
+  );
+
+  const handleSelectIndicatorName = (
+    name: AirConditionIndicators | RadiationBackgroundIndicators
+  ) => {
+    setSelectedIndicatorName(name);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("uk-UA", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const chartData = selectedIndicator?.values.map((item) => ({
+    ...item,
+    date: formatDate(item.date.toString()),
+    formattedValue: `${item.value} ${selectedIndicator?.unit}`,
+  }));
 
   return (
     <div className="flex flex-col gap-2">
@@ -37,33 +68,64 @@ export const PopupDetail: FC<IndustrialFacilitiesDataLab2> = ({
 
       <div className="mt-2">
         <span className="font-semibold">Показники:</span>
-        <ul className="list-disc pl-4">
-          {indicators.map((indicator, index) => (
-            <li key={index} className="text-sm">
-              <strong>{indicator.name}:</strong> {indicator.value}{" "}
-              {indicator.unit}
+        <ul className="flex list-disc flex-col gap-2 pl-4">
+          {indicators.map(({ name, unit }, index) => (
+            <li key={index} className="flex justify-between text-sm">
+              <div>
+                <strong>{name}</strong> ({unit})
+              </div>
+              <button
+                className={cn(
+                  "rounded-md bg-blue-300 px-1 py-0.5 text-white transition duration-300 hover:cursor-pointer hover:bg-blue-400",
+                  {
+                    "bg-blue-400 hover:!cursor-auto":
+                      selectedIndicatorName === name,
+                  }
+                )}
+                onClick={() => handleSelectIndicatorName(name)}
+                disabled={selectedIndicatorName === name}
+              >
+                Обрати
+              </button>
             </li>
           ))}
         </ul>
       </div>
 
       <div className="mt-4">
-        <span className="font-semibold">
-          {monitoringSubsystem === MonitoringSubsystem.RADIATION_BACKGROUND
-            ? "Рівень радіації (мкЗв/год)"
-            : "Якість повітря (умовні одиниці)"}
-        </span>
+        <span className="font-semibold">Обраний показник:</span>{" "}
+        {selectedIndicatorName} ({selectedIndicator?.unit})
       </div>
 
       <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={statistics}>
+        <LineChart data={chartData}>
           <CartesianGrid stroke="#E0E0E0" strokeDasharray="3 3" />
-          <XAxis dataKey="hour" tick={{ fontSize: 12 }} />
-          <YAxis tick={{ fontSize: 12 }} />
+          <XAxis
+            dataKey="date"
+            tick={{ fontSize: 12 }}
+            label={{ value: "Дата", position: "insideBottomRight", offset: -5 }}
+          />
+          <YAxis
+            tick={{ fontSize: 12 }}
+            label={{
+              value: selectedIndicator?.unit || "",
+              angle: -90,
+              position: "insideLeft",
+            }}
+          />
           <Tooltip
             contentStyle={{ backgroundColor: "#fff", borderRadius: "5px" }}
+            formatter={(value) => [
+              `${value} ${selectedIndicator?.unit}`,
+              selectedIndicatorName,
+            ]}
+            labelFormatter={(date) => `Дата: ${date}`}
           />
-          <Legend />
+          <Legend
+            formatter={() =>
+              `${selectedIndicatorName} (${selectedIndicator?.unit})`
+            }
+          />
           <Line
             type="monotone"
             dataKey="value"
@@ -71,6 +133,7 @@ export const PopupDetail: FC<IndustrialFacilitiesDataLab2> = ({
             strokeWidth={2}
             dot={{ r: 4 }}
             activeDot={{ r: 6 }}
+            name={selectedIndicatorName}
           />
         </LineChart>
       </ResponsiveContainer>
