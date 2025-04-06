@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { Marker, Popup } from "react-leaflet";
 import { MapSelectDropdownList } from "src/page-components/lab-2/MapSelectDropdownList";
 import { MAPS_OPTIONS } from "src/page-components/lab-2/MapSelectDropdownList/constants";
 import { PopupDetail } from "src/page-components/lab-2/PopupDetail";
@@ -6,19 +7,21 @@ import { LabDescription } from "src/components/LabDescription";
 import { LAB_2 } from "src/components/LabDescription/constants";
 import { PageWrapper } from "src/components/Layouts/PageWrapper";
 import { Map } from "src/components/Map";
-import { INDUSTRIAL_FACILITIES } from "src/components/Map/constants";
+import { INDUSTRIAL_FACILITIES_LAB_2 } from "src/components/Map/constants";
 import { Notice } from "src/components/Notice";
 
 const Lab2: FC = () => {
   const [activeOption, setActiveOption] = useState(MAPS_OPTIONS[0]);
 
-  const industrialFacilitiesCurrent = INDUSTRIAL_FACILITIES.filter((item) => {
-    if (activeOption.value === 0) {
-      return true;
-    }
+  const industrialFacilitiesCurrent = INDUSTRIAL_FACILITIES_LAB_2.filter(
+    (item) => {
+      if (activeOption.value === 0) {
+        return true;
+      }
 
-    return item.monitoringSubsystem === activeOption.value;
-  });
+      return item.monitoringSubsystem === activeOption.value;
+    }
+  );
 
   return (
     <PageWrapper mainClassName="pt-25 pb-10">
@@ -33,10 +36,17 @@ const Lab2: FC = () => {
             setOption={setActiveOption}
           />
 
-          <Map
-            industrialFacilities={industrialFacilitiesCurrent}
-            content={PopupDetail}
-          />
+          <Map>
+            <>
+              {industrialFacilitiesCurrent.map((marker) => (
+                <Marker key={marker.id} position={marker.position}>
+                  <Popup>
+                    <PopupDetail {...marker} />
+                  </Popup>
+                </Marker>
+              ))}
+            </>
+          </Map>
         </div>
       </section>
     </PageWrapper>

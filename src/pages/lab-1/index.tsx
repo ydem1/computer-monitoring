@@ -1,10 +1,11 @@
 import React, { FC } from "react";
+import { Marker, Popup } from "react-leaflet";
 import { PopupDetail } from "src/page-components/lab-1/PopupDetail";
 import { LabDescription } from "src/components/LabDescription";
 import { LAB_1 } from "src/components/LabDescription/constants";
 import { PageWrapper } from "src/components/Layouts/PageWrapper";
 import { Map } from "src/components/Map";
-import { INDUSTRIAL_FACILITIES } from "src/components/Map/constants";
+import { INDUSTRIAL_FACILITIES_LAB_1 } from "src/components/Map/constants";
 import { Notice } from "src/components/Notice";
 
 const Lab1: FC = () => (
@@ -12,7 +13,18 @@ const Lab1: FC = () => (
     <section className="container flex flex-col gap-10">
       <Notice />
       <LabDescription {...LAB_1} />
-      <Map industrialFacilities={INDUSTRIAL_FACILITIES} content={PopupDetail} />
+
+      <Map>
+        <>
+          {INDUSTRIAL_FACILITIES_LAB_1.map((marker) => (
+            <Marker key={marker.id} position={marker.position}>
+              <Popup>
+                <PopupDetail {...marker} />
+              </Popup>
+            </Marker>
+          ))}
+        </>
+      </Map>
     </section>
   </PageWrapper>
 );
