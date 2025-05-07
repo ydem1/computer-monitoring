@@ -8,7 +8,6 @@ import { Map } from "src/components/Map";
 import { INDUSTRIAL_FACILITIES_LAB_2 } from "src/components/Map/constants";
 import { MapSelectDropdownList } from "src/components/MapSelectDropdownList";
 import { MAPS_OPTIONS } from "src/components/MapSelectDropdownList/constants";
-import { Notice } from "src/components/Notice";
 
 const Lab2: FC = () => {
   const [activeOption, setActiveOption] = useState(MAPS_OPTIONS[0]);
@@ -26,7 +25,6 @@ const Lab2: FC = () => {
   return (
     <PageWrapper mainClassName="pt-25 pb-10">
       <section className="container flex flex-col gap-10">
-        <Notice />
         <LabDescription {...LAB_2} />
 
         <div className="flex flex-col items-end gap-2">
