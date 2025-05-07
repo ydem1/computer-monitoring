@@ -24,9 +24,9 @@ export enum AirConditionIndicators {
 }
 
 export enum RadiationBackgroundIndicators {
-  BACKGROUND_DOSE = "Фонова доза",
-  ENERGY_CONSUMPTION = "Енергоспоживання",
-  EFFICIENCY = "Ефективність",
+  BACKGROUND_DOSE = "Фонова доза станції",
+  ENERGY_CONSUMPTION = "Енергоспоживання станції",
+  EFFICIENCY = "Ефективність станції",
 }
 
 // ==== LAB 1 ====
@@ -76,4 +76,30 @@ export type IndicatorLab2 =
 
 export type IndustrialFacilitiesDataLab2 = IndustrialFacilitiesData & {
   indicators: IndicatorLab2[];
+};
+
+// ==== LAB 3 ====
+
+interface IndicatorBounds {
+  min: number;
+  max: number;
+}
+
+export type AllIndicators = AirConditionIndicators | RadiationBackgroundIndicators;
+
+export const AllIndicatorLimits: Record<AllIndicators, IndicatorBounds> = {
+  // AirConditionIndicators
+  [AirConditionIndicators.CO2_EMISSIONS]: { min: 0, max: 10 },
+  [AirConditionIndicators.NOX_EMISSIONS]: { min: 0, max: 50 },
+  [AirConditionIndicators.SO2_EMISSIONS]: { min: 0, max: 10 },
+  [AirConditionIndicators.DUST_EMISSIONS]: { min: 0, max: 100 },
+  [AirConditionIndicators.DIOXINS_EMISSIONS]: { min: 0, max: 500 },
+  [AirConditionIndicators.HEAVY_METALS_EMISSIONS]: { min: 0, max: 5 },
+  [AirConditionIndicators.ENERGY_CONSUMPTION]: { min: 0, max: 10 },
+  [AirConditionIndicators.EFFICIENCY]: { min: 0, max: 100 },
+
+  // RadiationBackgroundIndicators
+  [RadiationBackgroundIndicators.BACKGROUND_DOSE]: { min: 0, max: 100 },
+  [RadiationBackgroundIndicators.ENERGY_CONSUMPTION]: { min: 0, max: 500 },
+  [RadiationBackgroundIndicators.EFFICIENCY]: { min: 0, max: 100 },
 };
