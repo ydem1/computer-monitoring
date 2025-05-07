@@ -13,8 +13,12 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { getHeatmapColor } from "src/utils/getHeatmapColor";
 import {
   AirConditionIndicators,
+  AllIndicatorLimits,
+  AllIndicators,
+  IndicatorLab2,
   IndustrialFacilitiesDataLab2,
   MonitoringSubsystem,
   RadiationBackgroundIndicators,
@@ -115,6 +119,53 @@ export const PopupDetail: FC<IndustrialFacilitiesDataLab2> = ({
     return formatDate(date.toString());
   };
 
+  function normalize(name: AllIndicators, values: number[]): number[] {
+    const { min, max } = AllIndicatorLimits[name];
+    return values.map((value) => (value - min) / (max - min));
+  }
+
+  function calculateIndexesByDate(indicators: IndicatorLab2[]) {
+    const result: { date: Date; index: number | string }[] = [];
+
+    const allDates = Array.from(
+      new Set(
+        indicators.flatMap((indicator) =>
+          indicator.values.map((v) => v.date.toISOString())
+        )
+      )
+    ).map((dateStr) => new Date(dateStr));
+
+    allDates.forEach((date) => {
+      const normalizedValues: number[] = [];
+
+      indicators.forEach((indicator) => {
+        const value = indicator.values.find(
+          (v) => v.date.getTime() === date.getTime()
+        );
+
+        if (value !== undefined) {
+          const normalized = normalize(indicator.name as AllIndicators, [
+            value.value,
+          ]);
+          normalizedValues.push(normalized[0]);
+        }
+      });
+
+      if (normalizedValues.length === indicators.length) {
+        const index =
+          normalizedValues.reduce((sum, val) => sum + val, 0) /
+          normalizedValues.length;
+        result.push({ date, index });
+      } else {
+        result.push({ date, index: "Неможливо обчислити" });
+      }
+    });
+
+    return result;
+  }
+
+  const indexes = calculateIndexesByDate(indicators);
+
   return (
     <div className="flex flex-col gap-2">
       <span className="text-lg font-bold">{name}</span>
@@ -148,9 +199,33 @@ export const PopupDetail: FC<IndustrialFacilitiesDataLab2> = ({
           ))}
         </ul>
       </div>
+      <li className="flex items-center justify-between text-lg">
+        <span>Дата</span>
+        <span>Індекс</span>
+      </li>
+
+      {indexes.map(({ date, index }) => {
+        return (
+          <li
+            key={date.toISOString()}
+            className="flex items-center justify-between text-sm"
+          >
+            <span>{date.toLocaleDateString()}</span>
+
+            <span
+              className="p-2 text-white"
+              style={{
+                background: getHeatmapColor(index, 1),
+              }}
+            >
+              {typeof index === "number" ? index.toFixed(2) : index}
+            </span>
+          </li>
+        );
+      })}
 
       <div className="mt-4">
-        <span className="font-semibold">Обраний показник:</span>{" "}
+        <span className="font-semibold">Обраний показник:</span>
         {selectedIndicatorName} ({selectedIndicator?.unit})
       </div>
 
