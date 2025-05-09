@@ -14,7 +14,7 @@ const Lab2: FC = () => {
 
   const industrialFacilitiesCurrent = INDUSTRIAL_FACILITIES_LAB_2.filter(
     (item) => {
-      if (activeOption.value === 0) {
+      if (activeOption.value === "") {
         return true;
       }
 
