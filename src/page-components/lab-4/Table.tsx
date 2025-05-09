@@ -1,4 +1,7 @@
 import React from "react";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Yup from "yup";
+import { INDUSTRIAL_FACILITIES_LAB_3 } from "src/components/Map/constants";
 import { MapSelectDropdownList } from "src/components/MapSelectDropdownList";
 import {
   ALL_COMPANIES,
@@ -8,6 +11,8 @@ import { QueryParamKeys } from "src/components/MapSelectDropdownList/types";
 import { useQueryParams } from "src/hooks/useQueryParams";
 import { MonitoringSubsystem } from "src/@types/industrial-facilities";
 import { IOptionSelect } from "src/@types/option-select";
+
+const CLASNAME_FILED = "flex gap-5 items-center";
 
 export const Table = () => {
   const ecoMeasures = [
@@ -67,6 +72,32 @@ export const Table = () => {
     return matchesCompany && matchesType;
   });
 
+  // Форма для додавання заходу
+  const initialValues = {
+    name: "",
+    type: MonitoringSubsystem.RADIATION_BACKGROUND,
+    company: "",
+    amount: "",
+    date: "",
+    effect: "",
+    source: "",
+    executor: "",
+  };
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Це поле обов'язкове"),
+    amount: Yup.string().required("Це поле обов'язкове"),
+    date: Yup.date().required("Це поле обов'язкове"),
+    effect: Yup.string().required("Це поле обов'язкове"),
+    source: Yup.string().required("Це поле обов'язкове"),
+    executor: Yup.string().required("Це поле обов'язкове"),
+  });
+
+  const onSubmit = (values: typeof initialValues) => {
+    console.log(values);
+    // Логіка для додавання заходу
+  };
+
   return (
     <section className="container flex flex-col gap-10 !overflow-visible">
       <div className="flex gap-5">
@@ -98,14 +129,12 @@ export const Table = () => {
         {visibleEcoMeasures.map((project, index) => (
           <div
             key={index}
-            className="grid grid-cols-8 gap-4 border-t border-gray-300 px-5 py-3 text-sm text-gray-800"
+            className="grid grid-cols-8 gap-4 border-t border-gray-300 bg-white px-5 py-3 text-sm text-gray-800 last:rounded-b-xl"
           >
             <span>{project.name}</span>
             <span>
               <span className="rounded-xl bg-green-100 px-2 py-1 text-xs text-green-700">
-                {project.type === MonitoringSubsystem.RADIATION_BACKGROUND
-                  ? "Радіаційний фон"
-                  : "Стан повітря"}
+                {project.type}
               </span>
             </span>
             <span>{project.company}</span>
@@ -117,6 +146,149 @@ export const Table = () => {
           </div>
         ))}
       </div>
+
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        <Form className="grid grid-cols-2 gap-4 rounded-lg border border-gray-400 bg-white p-5">
+          <div className={CLASNAME_FILED}>
+            <label htmlFor="name">Назва заходу</label>
+            <Field
+              id="name"
+              name="name"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="name"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASNAME_FILED}>
+            <label htmlFor="type">Тип</label>
+            <Field
+              as="select"
+              id="type"
+              name="type"
+              className="rounded-lg border border-gray-300 p-2"
+            >
+              <option value={MonitoringSubsystem.RADIATION_BACKGROUND}>
+                Радіаційний фон
+              </option>
+              <option value={MonitoringSubsystem.AIR_CONDITION}>
+                Стан повітря
+              </option>
+            </Field>
+            <ErrorMessage
+              name="type"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASNAME_FILED}>
+            <label htmlFor="company">Підприємство</label>
+            <Field
+              as="select"
+              id="company"
+              name="company"
+              className="rounded-lg border border-gray-300 p-2"
+            >
+              {INDUSTRIAL_FACILITIES_LAB_3.map(({ id, slug, name }) => (
+                <option key={id} value={slug}>
+                  {name}
+                </option>
+              ))}
+            </Field>
+            <ErrorMessage
+              name="company"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASNAME_FILED}>
+            <label htmlFor="amount">Сума</label>
+            <Field
+              id="amount"
+              name="amount"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="amount"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASNAME_FILED}>
+            <label htmlFor="date">Дата проведення</label>
+            <Field
+              type="date"
+              id="date"
+              name="date"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="date"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASNAME_FILED}>
+            <label htmlFor="effect">Ефект</label>
+            <Field
+              id="effect"
+              name="effect"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="effect"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASNAME_FILED}>
+            <label htmlFor="source">Джерело</label>
+            <Field
+              id="source"
+              name="source"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="source"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASNAME_FILED}>
+            <label htmlFor="executor">Виконавець</label>
+            <Field
+              id="executor"
+              name="executor"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="executor"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="col-span-1 mt-4 rounded-lg bg-blue-500 p-2 text-white hover:cursor-pointer hover:opacity-70"
+          >
+            Додати захід
+          </button>
+        </Form>
+      </Formik>
     </section>
   );
 };
