@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { INDUSTRIAL_FACILITIES_LAB_3 } from "src/components/Map/constants";
@@ -12,33 +12,43 @@ import { useQueryParams } from "src/hooks/useQueryParams";
 import { MonitoringSubsystem } from "src/@types/industrial-facilities";
 import { IOptionSelect } from "src/@types/option-select";
 
-const CLASNAME_FILED = "flex gap-5 items-center";
+const CLASSNAME_FILED = "flex gap-5 items-center";
+const STORAGE_KEY = "eco_measures";
 
 export const Table = () => {
-  const ecoMeasures = [
-    {
-      name: "Встановлення сонячних панелей",
-      type: MonitoringSubsystem.RADIATION_BACKGROUND,
-      company: "Фокстрот",
-      slug_company: "завод-енергія",
-      amount: "2,000,000 грн",
-      date: "2025-12-31",
-      effect: "Зниження викидів CO₂ на 20%",
-      source: "Європейський грант",
-      executor: "ТОВ «ЕкоБуд»",
-    },
-    {
-      name: "Очищення стічних вод",
-      type: MonitoringSubsystem.AIR_CONDITION,
-      company: "МХП",
-      slug_company: "пат-науково-виробниче-підприємство-більшовик",
-      amount: "1,200,000 грн",
-      date: "2025-06-19",
-      effect: "Поліпшення якості води до санітарних норм",
-      source: "Фонд охорони довкілля",
-      executor: "КП «Водоканал»",
-    },
-  ];
+  // const ecoMeasures = [
+  //   {
+  //     name: "Встановлення сонячних панелей",
+  //     type: MonitoringSubsystem.RADIATION_BACKGROUND,
+  //     company: "Фокстрот",
+  //     slug_company: "завод-енергія",
+  //     amount: "2,000,000 грн",
+  //     date: "2025-12-31",
+  //     effect: "Зниження викидів CO₂ на 20%",
+  //     source: "Європейський грант",
+  //     executor: "ТОВ «ЕкоБуд»",
+  //   },
+  //   {
+  //     name: "Очищення стічних вод",
+  //     type: MonitoringSubsystem.AIR_CONDITION,
+  //     company: "МХП",
+  //     slug_company: "пат-науково-виробниче-підприємство-більшовик",
+  //     amount: "1,200,000 грн",
+  //     date: "2025-06-19",
+  //     effect: "Поліпшення якості води до санітарних норм",
+  //     source: "Фонд охорони довкілля",
+  //     executor: "КП «Водоканал»",
+  //   },
+  // ];
+
+  const [ecoMeasures, setEcoMeasures] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ecoMeasures));
+  }, [ecoMeasures]);
 
   const { getQueryParam, setQueryParam } = useQueryParams();
 
@@ -93,9 +103,18 @@ export const Table = () => {
     executor: Yup.string().required("Це поле обов'язкове"),
   });
 
-  const onSubmit = (values: typeof initialValues) => {
-    console.log(values);
-    // Логіка для додавання заходу
+  const onSubmit = (values: typeof initialValues, { resetForm }) => {
+    const companyData = INDUSTRIAL_FACILITIES_LAB_3.find(
+      (c) => c.slug === values.company
+    );
+    const newMeasure = {
+      ...values,
+      company: companyData?.name || "",
+      slug_company: values.company,
+    };
+    const updated = [...ecoMeasures, newMeasure];
+    setEcoMeasures(updated);
+    resetForm();
   };
 
   return (
@@ -153,7 +172,7 @@ export const Table = () => {
         onSubmit={onSubmit}
       >
         <Form className="grid grid-cols-2 gap-4 rounded-lg border border-gray-400 bg-white p-5">
-          <div className={CLASNAME_FILED}>
+          <div className={CLASSNAME_FILED}>
             <label htmlFor="name">Назва заходу</label>
             <Field
               id="name"
@@ -167,7 +186,7 @@ export const Table = () => {
             />
           </div>
 
-          <div className={CLASNAME_FILED}>
+          <div className={CLASSNAME_FILED}>
             <label htmlFor="type">Тип</label>
             <Field
               as="select"
@@ -189,7 +208,7 @@ export const Table = () => {
             />
           </div>
 
-          <div className={CLASNAME_FILED}>
+          <div className={CLASSNAME_FILED}>
             <label htmlFor="company">Підприємство</label>
             <Field
               as="select"
@@ -210,7 +229,7 @@ export const Table = () => {
             />
           </div>
 
-          <div className={CLASNAME_FILED}>
+          <div className={CLASSNAME_FILED}>
             <label htmlFor="amount">Сума</label>
             <Field
               id="amount"
@@ -224,7 +243,7 @@ export const Table = () => {
             />
           </div>
 
-          <div className={CLASNAME_FILED}>
+          <div className={CLASSNAME_FILED}>
             <label htmlFor="date">Дата проведення</label>
             <Field
               type="date"
@@ -239,7 +258,7 @@ export const Table = () => {
             />
           </div>
 
-          <div className={CLASNAME_FILED}>
+          <div className={CLASSNAME_FILED}>
             <label htmlFor="effect">Ефект</label>
             <Field
               id="effect"
@@ -253,7 +272,7 @@ export const Table = () => {
             />
           </div>
 
-          <div className={CLASNAME_FILED}>
+          <div className={CLASSNAME_FILED}>
             <label htmlFor="source">Джерело</label>
             <Field
               id="source"
@@ -267,7 +286,7 @@ export const Table = () => {
             />
           </div>
 
-          <div className={CLASNAME_FILED}>
+          <div className={CLASSNAME_FILED}>
             <label htmlFor="executor">Виконавець</label>
             <Field
               id="executor"
