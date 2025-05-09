@@ -80,12 +80,18 @@ export type IndustrialFacilitiesDataLab2 = IndustrialFacilitiesData & {
 
 // ==== LAB 3 ====
 
+export type IndustrialFacilitiesDataLab3 = IndustrialFacilitiesDataLab2 & {
+  slug: string;
+};
+
 interface IndicatorBounds {
   min: number;
   max: number;
 }
 
-export type AllIndicators = AirConditionIndicators | RadiationBackgroundIndicators;
+export type AllIndicators =
+  | AirConditionIndicators
+  | RadiationBackgroundIndicators;
 
 export const AllIndicatorLimits: Record<AllIndicators, IndicatorBounds> = {
   // AirConditionIndicators

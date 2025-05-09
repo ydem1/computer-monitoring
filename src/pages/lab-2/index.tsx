@@ -7,10 +7,10 @@ import { PageWrapper } from "src/components/Layouts/PageWrapper";
 import { Map } from "src/components/Map";
 import { INDUSTRIAL_FACILITIES_LAB_2 } from "src/components/Map/constants";
 import { MapSelectDropdownList } from "src/components/MapSelectDropdownList";
-import { MAPS_OPTIONS } from "src/components/MapSelectDropdownList/constants";
+import { TYPE_MONITORING } from "src/components/MapSelectDropdownList/constants";
 
 const Lab2: FC = () => {
-  const [activeOption, setActiveOption] = useState(MAPS_OPTIONS[0]);
+  const [activeOption, setActiveOption] = useState(TYPE_MONITORING[0]);
 
   const industrialFacilitiesCurrent = INDUSTRIAL_FACILITIES_LAB_2.filter(
     (item) => {
@@ -29,7 +29,7 @@ const Lab2: FC = () => {
 
         <div className="flex flex-col items-end gap-2">
           <MapSelectDropdownList
-            options={MAPS_OPTIONS}
+            options={TYPE_MONITORING}
             activeOption={activeOption}
             setOption={setActiveOption}
           />
