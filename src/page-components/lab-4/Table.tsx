@@ -24,6 +24,7 @@ import { QueryParamKeys } from "src/components/MapSelectDropdownList/types";
 import { useQueryParams } from "src/hooks/useQueryParams";
 import { MonitoringSubsystem } from "src/@types/industrial-facilities";
 import { IOptionSelect } from "src/@types/option-select";
+import { initialEcoMeasures } from "./init-eco-measures";
 
 const CLASSNAME_FILED = "flex gap-5 items-center";
 const STORAGE_KEY = "eco_measures";
@@ -43,7 +44,7 @@ interface IEcoMeasure {
 export const EcoMeasureTable = () => {
   const [ecoMeasures, setEcoMeasures] = useState<IEcoMeasure[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
+    return saved ? JSON.parse(saved) : initialEcoMeasures;
   });
 
   const [isAddFromShown, setIsAddFromShown] = useState(false);
