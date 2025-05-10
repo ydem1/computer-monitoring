@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { saveAs } from "file-saver";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as XLSX from "xlsx";
 import * as Yup from "yup";
 import { INDUSTRIAL_FACILITIES_LAB_3 } from "src/components/Map/constants";
 import { MapSelectDropdownList } from "src/components/MapSelectDropdownList";
@@ -32,6 +35,8 @@ export const Table = () => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
   });
+
+  const [isAddFromShown, setIsAddFromShown] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(ecoMeasures));
@@ -113,6 +118,71 @@ export const Table = () => {
     const updated = [...ecoMeasures, newMeasure];
     setEcoMeasures(updated);
     resetForm();
+    setIsAddFromShown(false);
+  };
+
+  const handleExportWord = async () => {
+    const doc = new Document({
+      sections: [
+        {
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun({ text: "Заходи:", bold: true, size: 28 }),
+              ],
+            }),
+            ...ecoMeasures.map(
+              (measure, i) =>
+                new Paragraph({
+                  spacing: { after: 200 },
+                  children: [
+                    new TextRun({
+                      text: `${i + 1}. Назва: ${measure.name}`,
+                      bold: true,
+                    }),
+                    new TextRun(`\nТип: ${measure.type}`),
+                    new TextRun(`\nПідприємство: ${measure.company}`),
+                    new TextRun(`\nСума: ${measure.amount}`),
+                    new TextRun(`\nДата: ${measure.date}`),
+                    new TextRun(`\nЕфект: ${measure.effect}`),
+                    new TextRun(`\nДжерело: ${measure.source}`),
+                    new TextRun(`\nВиконавець: ${measure.executor}`),
+                  ],
+                })
+            ),
+          ],
+        },
+      ],
+    });
+
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, "eco_measures.docx");
+  };
+
+  const handleExportExcel = () => {
+    const renamedData = ecoMeasures.map((item) => ({
+      Назва: item.name,
+      Тип: item.type,
+      Підприємство: item.company,
+      Сума: item.amount,
+      Дата: item.date,
+      Ефект: item.effect,
+      Джерело: item.source,
+      Виконавець: item.executor,
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(renamedData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "EcoMeasures");
+
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([wbout], { type: "application/octet-stream" });
+
+    saveAs(blob, "eco_measures.xlsx");
+  };
+
+  const handleOpenAddForm = () => {
+    setIsAddFromShown(true);
   };
 
   const handleDelete = (index: number) => {
@@ -128,25 +198,52 @@ export const Table = () => {
 
   return (
     <section className="container flex flex-col gap-10 !overflow-visible">
-      <div className="flex gap-5">
-        <MapSelectDropdownList
-          options={ALL_COMPANIES}
-          activeOption={activeCompany}
-          setOption={setActiveCompany}
-        />
+      <div className="flex justify-between">
+        <div className="flex gap-5">
+          <MapSelectDropdownList
+            options={ALL_COMPANIES}
+            activeOption={activeCompany}
+            setOption={setActiveCompany}
+          />
 
-        <MapSelectDropdownList
-          options={TYPE_MONITORING}
-          activeOption={activeType}
-          setOption={setActiveType}
-        />
+          <MapSelectDropdownList
+            options={TYPE_MONITORING}
+            activeOption={activeType}
+            setOption={setActiveType}
+          />
 
-        <button
-          className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white px-3.5 py-2 text-lg hover:cursor-pointer"
-          onClick={handlResetFilter}
-        >
-          Скинути фільтри
-        </button>
+          <button
+            className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white px-3.5 py-2 text-lg hover:cursor-pointer"
+            onClick={handlResetFilter}
+          >
+            Скинути фільтри
+          </button>
+        </div>
+
+        <div className="flex gap-5">
+          <button
+            className="flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-600 px-3.5 py-2 text-lg text-white hover:cursor-pointer"
+            onClick={handleExportWord}
+          >
+            <i className="fas fa-file-word text-white" />
+            Word
+          </button>
+          <button
+            className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-600 px-3.5 py-2 text-lg text-white hover:cursor-pointer"
+            onClick={handleExportExcel}
+          >
+            <i className="fas fa-file-excel text-white" />
+            Excel
+          </button>
+
+          <button
+            className="flex items-center gap-2 rounded-xl border border-cyan-200 bg-cyan-600 px-3.5 py-2 text-lg text-white hover:cursor-pointer"
+            onClick={handleOpenAddForm}
+          >
+            <i className="fas fa-plus text-white" />
+            Додати захід
+          </button>
+        </div>
       </div>
 
       <div className="rounded-xl border border-gray-400">
@@ -208,154 +305,156 @@ export const Table = () => {
         )}
       </div>
 
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        <Form className="grid grid-cols-2 gap-4 rounded-lg border border-gray-400 bg-white p-5">
-          <div className={CLASSNAME_FILED}>
-            <label htmlFor="name">Назва заходу</label>
-            <Field
-              id="name"
-              name="name"
-              className="rounded-lg border border-gray-300 p-2"
-            />
-            <ErrorMessage
-              name="name"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+      {isAddFromShown && (
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          <Form className="grid grid-cols-2 gap-4 rounded-lg border border-gray-400 bg-white p-5">
+            <div className={CLASSNAME_FILED}>
+              <label htmlFor="name">Назва заходу</label>
+              <Field
+                id="name"
+                name="name"
+                className="rounded-lg border border-gray-300 p-2"
+              />
+              <ErrorMessage
+                name="name"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className={CLASSNAME_FILED}>
-            <label htmlFor="type">Тип</label>
-            <Field
-              as="select"
-              id="type"
-              name="type"
-              className="rounded-lg border border-gray-300 p-2"
-            >
-              <option value="" disabled hidden>
-                -- Оберіть тип моніторингу --
-              </option>
-              <option value={MonitoringSubsystem.RADIATION_BACKGROUND}>
-                Радіаційний фон
-              </option>
-              <option value={MonitoringSubsystem.AIR_CONDITION}>
-                Стан повітря
-              </option>
-            </Field>
-            <ErrorMessage
-              name="type"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-
-          <div className={CLASSNAME_FILED}>
-            <label htmlFor="company">Підприємство</label>
-            <Field
-              as="select"
-              id="company"
-              name="company"
-              className="rounded-lg border border-gray-300 p-2"
-            >
-              <option value="" disabled hidden>
-                -- Оберіть підприємство --
-              </option>
-              {INDUSTRIAL_FACILITIES_LAB_3.map(({ id, slug, name }) => (
-                <option key={id} value={slug}>
-                  {name}
+            <div className={CLASSNAME_FILED}>
+              <label htmlFor="type">Тип</label>
+              <Field
+                as="select"
+                id="type"
+                name="type"
+                className="rounded-lg border border-gray-300 p-2"
+              >
+                <option value="" disabled hidden>
+                  -- Оберіть тип моніторингу --
                 </option>
-              ))}
-            </Field>
-            <ErrorMessage
-              name="company"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+                <option value={MonitoringSubsystem.RADIATION_BACKGROUND}>
+                  Радіаційний фон
+                </option>
+                <option value={MonitoringSubsystem.AIR_CONDITION}>
+                  Стан повітря
+                </option>
+              </Field>
+              <ErrorMessage
+                name="type"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className={CLASSNAME_FILED}>
-            <label htmlFor="amount">Сума</label>
-            <Field
-              id="amount"
-              name="amount"
-              className="rounded-lg border border-gray-300 p-2"
-            />
-            <ErrorMessage
-              name="amount"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            <div className={CLASSNAME_FILED}>
+              <label htmlFor="company">Підприємство</label>
+              <Field
+                as="select"
+                id="company"
+                name="company"
+                className="rounded-lg border border-gray-300 p-2"
+              >
+                <option value="" disabled hidden>
+                  -- Оберіть підприємство --
+                </option>
+                {INDUSTRIAL_FACILITIES_LAB_3.map(({ id, slug, name }) => (
+                  <option key={id} value={slug}>
+                    {name}
+                  </option>
+                ))}
+              </Field>
+              <ErrorMessage
+                name="company"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className={CLASSNAME_FILED}>
-            <label htmlFor="date">Дата проведення</label>
-            <Field
-              type="date"
-              id="date"
-              name="date"
-              className="rounded-lg border border-gray-300 p-2"
-            />
-            <ErrorMessage
-              name="date"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            <div className={CLASSNAME_FILED}>
+              <label htmlFor="amount">Сума</label>
+              <Field
+                id="amount"
+                name="amount"
+                className="rounded-lg border border-gray-300 p-2"
+              />
+              <ErrorMessage
+                name="amount"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className={CLASSNAME_FILED}>
-            <label htmlFor="effect">Ефект</label>
-            <Field
-              id="effect"
-              name="effect"
-              className="rounded-lg border border-gray-300 p-2"
-            />
-            <ErrorMessage
-              name="effect"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            <div className={CLASSNAME_FILED}>
+              <label htmlFor="date">Дата проведення</label>
+              <Field
+                type="date"
+                id="date"
+                name="date"
+                className="rounded-lg border border-gray-300 p-2"
+              />
+              <ErrorMessage
+                name="date"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className={CLASSNAME_FILED}>
-            <label htmlFor="source">Джерело</label>
-            <Field
-              id="source"
-              name="source"
-              className="rounded-lg border border-gray-300 p-2"
-            />
-            <ErrorMessage
-              name="source"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            <div className={CLASSNAME_FILED}>
+              <label htmlFor="effect">Ефект</label>
+              <Field
+                id="effect"
+                name="effect"
+                className="rounded-lg border border-gray-300 p-2"
+              />
+              <ErrorMessage
+                name="effect"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <div className={CLASSNAME_FILED}>
-            <label htmlFor="executor">Виконавець</label>
-            <Field
-              id="executor"
-              name="executor"
-              className="rounded-lg border border-gray-300 p-2"
-            />
-            <ErrorMessage
-              name="executor"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
+            <div className={CLASSNAME_FILED}>
+              <label htmlFor="source">Джерело</label>
+              <Field
+                id="source"
+                name="source"
+                className="rounded-lg border border-gray-300 p-2"
+              />
+              <ErrorMessage
+                name="source"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
 
-          <button
-            type="submit"
-            className="col-span-1 mt-4 rounded-lg bg-blue-500 p-2 text-white hover:cursor-pointer hover:opacity-70"
-          >
-            Додати захід
-          </button>
-        </Form>
-      </Formik>
+            <div className={CLASSNAME_FILED}>
+              <label htmlFor="executor">Виконавець</label>
+              <Field
+                id="executor"
+                name="executor"
+                className="rounded-lg border border-gray-300 p-2"
+              />
+              <ErrorMessage
+                name="executor"
+                component="div"
+                className="text-red-500"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="col-span-1 mt-4 rounded-lg bg-blue-500 p-2 text-white hover:cursor-pointer hover:opacity-70"
+            >
+              Додати захід
+            </button>
+          </Form>
+        </Formik>
+      )}
     </section>
   );
 };
