@@ -120,6 +120,17 @@ export const Table = () => {
     resetForm();
   };
 
+  const handleDelete = (index: number) => {
+    const updated = ecoMeasures.filter((_, i) => i !== index);
+    setEcoMeasures(updated);
+  };
+
+  const handleEdit = (index: number) => {
+    const itemToEdit = ecoMeasures[index];
+    // наприклад: відкрити модальне вікно з itemToEdit, або встановити його в окремий useState для редагування
+    alert(`Редагування елементу: ${itemToEdit.name}`);
+  };
+
   return (
     <section className="container flex flex-col gap-10 !overflow-visible">
       <div className="flex gap-5">
@@ -137,7 +148,7 @@ export const Table = () => {
       </div>
 
       <div className="rounded-xl border border-gray-400">
-        <div className="rounded-x-xl grid grid-cols-8 gap-4 rounded-t-xl bg-gray-200 p-5 text-lg font-semibold">
+        <div className="rounded-x-xl grid grid-cols-9 gap-4 rounded-t-xl bg-gray-200 p-5 text-lg font-semibold">
           <span>Назва</span>
           <span>Тип</span>
           <span>Підприємство</span>
@@ -151,7 +162,7 @@ export const Table = () => {
         {visibleEcoMeasures.map((project, index) => (
           <div
             key={index}
-            className="grid grid-cols-8 gap-4 border-t border-gray-300 bg-white px-5 py-3 text-sm text-gray-800 last:rounded-b-xl"
+            className="grid grid-cols-9 gap-4 border-t border-gray-300 bg-white px-5 py-3 text-sm text-gray-800 last:rounded-b-xl"
           >
             <span>{project.name}</span>
             <span>
@@ -165,6 +176,24 @@ export const Table = () => {
             <span>{project.effect}</span>
             <span>{project.source}</span>
             <span>{project.executor}</span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleEdit(index)}
+                className="h-max rounded bg-yellow-500 px-2 py-1 text-white hover:cursor-pointer hover:bg-yellow-600"
+                title="Редагувати"
+              >
+                ✏️
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDelete(index)}
+                className="h-max rounded bg-red-500 px-2 py-1 text-white hover:cursor-pointer hover:bg-red-600"
+                title="Видалити"
+              >
+                🗑️
+              </button>
+            </div>
           </div>
         ))}
       </div>
