@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Document, Packer, Paragraph, TextRun } from "docx";
+import {
+  AlignmentType,
+  Document,
+  Packer,
+  Paragraph,
+  Table,
+  TableCell,
+  TableRow,
+  TextRun,
+  WidthType,
+} from "docx";
 import { saveAs } from "file-saver";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as XLSX from "xlsx";
@@ -30,7 +40,7 @@ interface IEcoMeasure {
   executor: string;
 }
 
-export const Table = () => {
+export const EcoMeasureTable = () => {
   const [ecoMeasures, setEcoMeasures] = useState<IEcoMeasure[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
@@ -122,34 +132,75 @@ export const Table = () => {
   };
 
   const handleExportWord = async () => {
+    const tableRows = [
+      // Заголовки таблиці
+      new TableRow({
+        tableHeader: true,
+        children: [
+          new TableCell({ children: [new Paragraph("№")] }),
+          new TableCell({ children: [new Paragraph("Назва")] }),
+          new TableCell({ children: [new Paragraph("Тип")] }),
+          new TableCell({ children: [new Paragraph("Підприємство")] }),
+          new TableCell({ children: [new Paragraph("Сума")] }),
+          new TableCell({ children: [new Paragraph("Дата")] }),
+          new TableCell({ children: [new Paragraph("Ефект")] }),
+          new TableCell({ children: [new Paragraph("Джерело")] }),
+          new TableCell({ children: [new Paragraph("Виконавець")] }),
+        ],
+      }),
+
+      // Дані з ecoMeasures
+      ...ecoMeasures.map(
+        (measure, i) =>
+          new TableRow({
+            children: [
+              new TableCell({ children: [new Paragraph(String(i + 1))] }),
+              new TableCell({ children: [new Paragraph(measure.name)] }),
+              new TableCell({ children: [new Paragraph(measure.type)] }),
+              new TableCell({ children: [new Paragraph(measure.company)] }),
+              new TableCell({
+                children: [new Paragraph(String(measure.amount))],
+              }),
+              new TableCell({ children: [new Paragraph(measure.date)] }),
+              new TableCell({
+                children: [new Paragraph(String(measure.effect))],
+              }),
+              new TableCell({
+                children: [new Paragraph(String(measure.source))],
+              }),
+              new TableCell({
+                children: [new Paragraph(String(measure.executor))],
+              }),
+            ],
+          })
+      ),
+    ];
+
     const doc = new Document({
       sections: [
         {
           children: [
+            // Заголовок по центру
             new Paragraph({
+              alignment: AlignmentType.CENTER,
               children: [
-                new TextRun({ text: "Заходи:", bold: true, size: 28 }),
+                new TextRun({
+                  text: "Еко заходи",
+                  bold: true,
+                  size: 32,
+                }),
               ],
             }),
-            ...ecoMeasures.map(
-              (measure, i) =>
-                new Paragraph({
-                  spacing: { after: 200 },
-                  children: [
-                    new TextRun({
-                      text: `${i + 1}. Назва: ${measure.name}`,
-                      bold: true,
-                    }),
-                    new TextRun(`\nТип: ${measure.type}`),
-                    new TextRun(`\nПідприємство: ${measure.company}`),
-                    new TextRun(`\nСума: ${measure.amount}`),
-                    new TextRun(`\nДата: ${measure.date}`),
-                    new TextRun(`\nЕфект: ${measure.effect}`),
-                    new TextRun(`\nДжерело: ${measure.source}`),
-                    new TextRun(`\nВиконавець: ${measure.executor}`),
-                  ],
-                })
-            ),
+            new Paragraph({ text: "", spacing: { after: 200 } }), // Відступ перед таблицею
+
+            // Таблиця
+            new Table({
+              rows: tableRows,
+              width: {
+                size: 100,
+                type: WidthType.PERCENTAGE,
+              },
+            }),
           ],
         },
       ],
