@@ -60,7 +60,7 @@ export const MapSelectDropdownList: FC<Props> = ({
     <Dropdown
       className={className}
       head={headDropdownLabel}
-      bodyClassName="bg-white w-full top-12 z-10 rounded-xl"
+      bodyClassName="bg-white w-full top-12 z-10 rounded-xl max-h-80 overflow-auto"
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >

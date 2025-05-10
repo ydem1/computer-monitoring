@@ -2,6 +2,7 @@ import {
   AirConditionIndicators,
   IndustrialFacilitiesDataLab1,
   IndustrialFacilitiesDataLab2,
+  IndustrialFacilitiesDataLab3,
   MonitoringSubsystem,
   RadiationBackgroundIndicators,
 } from "src/@types/industrial-facilities";
@@ -729,7 +730,7 @@ export const INDUSTRIAL_FACILITIES_LAB_2: IndustrialFacilitiesDataLab2[] = [
   },
 ];
 
-export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
+export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab3[] = [
   {
     id: 1,
     position: [50.45268, 30.441119],
@@ -779,6 +780,10 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "ПАТ Науково-виробниче підприємство 'Більшовик'"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
   {
     id: 2,
@@ -828,6 +833,10 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "Завод Енергія"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
   {
     id: 3,
@@ -868,6 +877,10 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "Інститут ядерних досліджень НАН України"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
   {
     id: 4,
@@ -918,6 +931,10 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "Київський картонно-паперовий комбінат"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
   {
     id: 5,
@@ -969,6 +986,10 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "Станція теплопостачання №1 (СТ-1, раніше ТЕЦ-3)"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
   {
     id: 6,
@@ -1024,6 +1045,10 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "Дарницька ТЕЦ"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
   {
     id: 7,
@@ -1077,6 +1102,10 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "ТЕЦ-6"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
   {
     id: 8,
@@ -1129,6 +1158,10 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "ТЕЦ-5. КП 'КИЇВТЕПЛОЕНЕРГО'"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
   {
     id: 9,
@@ -1173,6 +1206,10 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "АТ 'Київський вітамінний завод'"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
   {
     id: 10,
@@ -1215,5 +1252,9 @@ export const INDUSTRIAL_FACILITIES_LAB_3: IndustrialFacilitiesDataLab2[] = [
         ],
       },
     ],
+    slug: "Дарницький вагоноремонтний завод"
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zа-яіїєґ0-9-]/gi, ""),
   },
 ];
