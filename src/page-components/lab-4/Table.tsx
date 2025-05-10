@@ -104,6 +104,11 @@ export const EcoMeasureTable = () => {
     executor: "",
   };
 
+  const [currentFormValues, setCurrentFormValues] =
+    useState<typeof initialValues>(initialValues);
+
+  const [editedIndex, setEditedIndex] = useState<number>(null);
+
   const validationSchema = Yup.object({
     name: Yup.string().required("Це поле обов'язкове"),
     amount: Yup.string().required("Це поле обов'язкове"),
@@ -125,10 +130,23 @@ export const EcoMeasureTable = () => {
       company: companyData?.name || "",
       slug_company: values.company,
     };
-    const updated = [...ecoMeasures, newMeasure];
+
+    let updated;
+
+    if (editedIndex !== null) {
+      // редагування
+      updated = ecoMeasures.map((item, index) =>
+        index === editedIndex ? newMeasure : item
+      );
+    } else {
+      // додавання
+      updated = [...ecoMeasures, newMeasure];
+    }
+
     setEcoMeasures(updated);
     resetForm();
     setIsAddFromShown(false);
+    setEditedIndex(null);
   };
 
   const handleExportWord = async () => {
@@ -242,9 +260,11 @@ export const EcoMeasureTable = () => {
   };
 
   const handleEdit = (index: number) => {
-    const itemToEdit = ecoMeasures[index];
-    // наприклад: відкрити модальне вікно з itemToEdit, або встановити його в окремий useState для редагування
-    alert(`Редагування елементу: ${itemToEdit.name}`);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { company, slug_company, ...ecoMeasure } = ecoMeasures[index];
+    setEditedIndex(index);
+    setCurrentFormValues({ company: slug_company, ...ecoMeasure });
+    handleOpenAddForm();
   };
 
   return (
@@ -358,9 +378,10 @@ export const EcoMeasureTable = () => {
 
       {isAddFromShown && (
         <Formik
-          initialValues={initialValues}
+          initialValues={currentFormValues}
           validationSchema={validationSchema}
           onSubmit={onSubmit}
+          enableReinitialize={true}
         >
           <Form className="grid grid-cols-2 gap-4 rounded-lg border border-gray-400 bg-white p-5">
             <div className={CLASSNAME_FILED}>
@@ -501,7 +522,7 @@ export const EcoMeasureTable = () => {
               type="submit"
               className="col-span-1 mt-4 rounded-lg bg-blue-500 p-2 text-white hover:cursor-pointer hover:opacity-70"
             >
-              Додати захід
+              {editedIndex !== null ? "Редагувати захід" : "Додати захід"}
             </button>
           </Form>
         </Formik>
