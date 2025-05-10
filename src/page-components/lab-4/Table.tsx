@@ -15,33 +15,20 @@ import { IOptionSelect } from "src/@types/option-select";
 const CLASSNAME_FILED = "flex gap-5 items-center";
 const STORAGE_KEY = "eco_measures";
 
-export const Table = () => {
-  // const ecoMeasures = [
-  //   {
-  //     name: "Встановлення сонячних панелей",
-  //     type: MonitoringSubsystem.RADIATION_BACKGROUND,
-  //     company: "Фокстрот",
-  //     slug_company: "завод-енергія",
-  //     amount: "2,000,000 грн",
-  //     date: "2025-12-31",
-  //     effect: "Зниження викидів CO₂ на 20%",
-  //     source: "Європейський грант",
-  //     executor: "ТОВ «ЕкоБуд»",
-  //   },
-  //   {
-  //     name: "Очищення стічних вод",
-  //     type: MonitoringSubsystem.AIR_CONDITION,
-  //     company: "МХП",
-  //     slug_company: "пат-науково-виробниче-підприємство-більшовик",
-  //     amount: "1,200,000 грн",
-  //     date: "2025-06-19",
-  //     effect: "Поліпшення якості води до санітарних норм",
-  //     source: "Фонд охорони довкілля",
-  //     executor: "КП «Водоканал»",
-  //   },
-  // ];
+interface IEcoMeasure {
+  company: string;
+  slug_company: string;
+  name: string;
+  type: string;
+  amount: string;
+  date: string;
+  effect: string;
+  source: string;
+  executor: string;
+}
 
-  const [ecoMeasures, setEcoMeasures] = useState(() => {
+export const Table = () => {
+  const [ecoMeasures, setEcoMeasures] = useState<IEcoMeasure[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
   });
@@ -159,43 +146,51 @@ export const Table = () => {
           <span>Виконавець</span>
         </div>
 
-        {visibleEcoMeasures.map((project, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-9 gap-4 border-t border-gray-300 bg-white px-5 py-3 text-sm text-gray-800 last:rounded-b-xl"
-          >
-            <span>{project.name}</span>
-            <span>
-              <span className="rounded-xl bg-green-100 px-2 py-1 text-xs text-green-700">
-                {project.type}
+        {visibleEcoMeasures.length !== 0 ? (
+          visibleEcoMeasures.map((project, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-9 gap-4 border-t border-gray-300 bg-white px-5 py-3 text-sm text-gray-800 last:rounded-b-xl"
+            >
+              <span>{project.name}</span>
+              <span>
+                <span className="rounded-xl bg-green-100 px-2 py-1 text-xs text-green-700">
+                  {project.type}
+                </span>
               </span>
-            </span>
-            <span>{project.company}</span>
-            <span>{project.amount}</span>
-            <span>{project.date}</span>
-            <span>{project.effect}</span>
-            <span>{project.source}</span>
-            <span>{project.executor}</span>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => handleEdit(index)}
-                className="h-max rounded bg-yellow-500 px-2 py-1 text-white hover:cursor-pointer hover:bg-yellow-600"
-                title="Редагувати"
-              >
-                ✏️
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDelete(index)}
-                className="h-max rounded bg-red-500 px-2 py-1 text-white hover:cursor-pointer hover:bg-red-600"
-                title="Видалити"
-              >
-                🗑️
-              </button>
+              <span>{project.company}</span>
+              <span>{project.amount}</span>
+              <span>{project.date}</span>
+              <span>{project.effect}</span>
+              <span>{project.source}</span>
+              <span>{project.executor}</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleEdit(index)}
+                  className="h-max rounded bg-yellow-500 px-2 py-1 text-white hover:cursor-pointer hover:bg-yellow-600"
+                  title="Редагувати"
+                >
+                  ✏️
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(index)}
+                  className="h-max rounded bg-red-500 px-2 py-1 text-white hover:cursor-pointer hover:bg-red-600"
+                  title="Видалити"
+                >
+                  🗑️
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="grid grid-cols-9 gap-4 border-t border-gray-300 bg-white px-5 py-3 text-sm text-gray-800 last:rounded-b-xl">
+            <div className="col-span-9 flex items-center justify-center py-6 text-center text-sm text-gray-500 italic">
+              Немає доданих заходів для відображення
             </div>
           </div>
-        ))}
+        )}
       </div>
 
       <Formik
