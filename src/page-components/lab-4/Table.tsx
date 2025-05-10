@@ -85,7 +85,7 @@ export const Table = () => {
   // Форма для додавання заходу
   const initialValues = {
     name: "",
-    type: MonitoringSubsystem.RADIATION_BACKGROUND,
+    type: "",
     company: "",
     amount: "",
     date: "",
@@ -101,12 +101,15 @@ export const Table = () => {
     effect: Yup.string().required("Це поле обов'язкове"),
     source: Yup.string().required("Це поле обов'язкове"),
     executor: Yup.string().required("Це поле обов'язкове"),
+    type: Yup.string().required("Це поле обов'язкове"),
+    company: Yup.string().required("Це поле обов'язкове"),
   });
 
   const onSubmit = (values: typeof initialValues, { resetForm }) => {
     const companyData = INDUSTRIAL_FACILITIES_LAB_3.find(
       (c) => c.slug === values.company
     );
+
     const newMeasure = {
       ...values,
       company: companyData?.name || "",
@@ -194,6 +197,9 @@ export const Table = () => {
               name="type"
               className="rounded-lg border border-gray-300 p-2"
             >
+              <option value="" disabled hidden>
+                -- Оберіть тип моніторингу --
+              </option>
               <option value={MonitoringSubsystem.RADIATION_BACKGROUND}>
                 Радіаційний фон
               </option>
@@ -216,6 +222,9 @@ export const Table = () => {
               name="company"
               className="rounded-lg border border-gray-300 p-2"
             >
+              <option value="" disabled hidden>
+                -- Оберіть підприємство --
+              </option>
               {INDUSTRIAL_FACILITIES_LAB_3.map(({ id, slug, name }) => (
                 <option key={id} value={slug}>
                   {name}
