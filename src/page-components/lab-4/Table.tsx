@@ -42,12 +42,17 @@ interface IEcoMeasure {
 }
 
 export const EcoMeasureTable = () => {
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight + 330,
+      behavior: "smooth",
+    });
+  };
+
   const [ecoMeasures, setEcoMeasures] = useState<IEcoMeasure[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved ? JSON.parse(saved) : initialEcoMeasures;
   });
-
-  const [isAddFromShown, setIsAddFromShown] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(ecoMeasures));
@@ -146,7 +151,6 @@ export const EcoMeasureTable = () => {
 
     setEcoMeasures(updated);
     resetForm();
-    setIsAddFromShown(false);
     setEditedIndex(null);
   };
 
@@ -252,7 +256,7 @@ export const EcoMeasureTable = () => {
   };
 
   const handleOpenAddForm = () => {
-    setIsAddFromShown(true);
+    scrollToBottom();
   };
 
   const handleDelete = (index: number) => {
@@ -266,6 +270,7 @@ export const EcoMeasureTable = () => {
     setEditedIndex(index);
     setCurrentFormValues({ company: slug_company, ...ecoMeasure });
     handleOpenAddForm();
+    scrollToBottom();
   };
 
   return (
@@ -377,157 +382,155 @@ export const EcoMeasureTable = () => {
         )}
       </div>
 
-      {isAddFromShown && (
-        <Formik
-          initialValues={currentFormValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-          enableReinitialize={true}
-        >
-          <Form className="grid grid-cols-2 gap-4 rounded-lg border border-gray-400 bg-white p-5">
-            <div className={CLASSNAME_FILED}>
-              <label htmlFor="name">Назва заходу</label>
-              <Field
-                id="name"
-                name="name"
-                className="rounded-lg border border-gray-300 p-2"
-              />
-              <ErrorMessage
-                name="name"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
+      <Formik
+        initialValues={currentFormValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+      >
+        <Form className="grid grid-cols-2 gap-4 rounded-lg border border-gray-400 bg-white p-5">
+          <div className={CLASSNAME_FILED}>
+            <label htmlFor="name">Назва заходу</label>
+            <Field
+              id="name"
+              name="name"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="name"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
 
-            <div className={CLASSNAME_FILED}>
-              <label htmlFor="type">Тип</label>
-              <Field
-                as="select"
-                id="type"
-                name="type"
-                className="rounded-lg border border-gray-300 p-2"
-              >
-                <option value="" disabled hidden>
-                  -- Оберіть тип моніторингу --
-                </option>
-                <option value={MonitoringSubsystem.RADIATION_BACKGROUND}>
-                  Радіаційний фон
-                </option>
-                <option value={MonitoringSubsystem.AIR_CONDITION}>
-                  Стан повітря
-                </option>
-              </Field>
-              <ErrorMessage
-                name="type"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-
-            <div className={CLASSNAME_FILED}>
-              <label htmlFor="company">Підприємство</label>
-              <Field
-                as="select"
-                id="company"
-                name="company"
-                className="rounded-lg border border-gray-300 p-2"
-              >
-                <option value="" disabled hidden>
-                  -- Оберіть підприємство --
-                </option>
-                {INDUSTRIAL_FACILITIES_LAB_3.map(({ id, slug, name }) => (
-                  <option key={id} value={slug}>
-                    {name}
-                  </option>
-                ))}
-              </Field>
-              <ErrorMessage
-                name="company"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-
-            <div className={CLASSNAME_FILED}>
-              <label htmlFor="amount">Сума</label>
-              <Field
-                id="amount"
-                name="amount"
-                className="rounded-lg border border-gray-300 p-2"
-              />
-              <ErrorMessage
-                name="amount"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-
-            <div className={CLASSNAME_FILED}>
-              <label htmlFor="date">Дата проведення</label>
-              <Field
-                type="date"
-                id="date"
-                name="date"
-                className="rounded-lg border border-gray-300 p-2"
-              />
-              <ErrorMessage
-                name="date"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-
-            <div className={CLASSNAME_FILED}>
-              <label htmlFor="effect">Ефект</label>
-              <Field
-                id="effect"
-                name="effect"
-                className="rounded-lg border border-gray-300 p-2"
-              />
-              <ErrorMessage
-                name="effect"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-
-            <div className={CLASSNAME_FILED}>
-              <label htmlFor="source">Джерело</label>
-              <Field
-                id="source"
-                name="source"
-                className="rounded-lg border border-gray-300 p-2"
-              />
-              <ErrorMessage
-                name="source"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-
-            <div className={CLASSNAME_FILED}>
-              <label htmlFor="executor">Виконавець</label>
-              <Field
-                id="executor"
-                name="executor"
-                className="rounded-lg border border-gray-300 p-2"
-              />
-              <ErrorMessage
-                name="executor"
-                component="div"
-                className="text-red-500"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="col-span-1 mt-4 rounded-lg bg-blue-500 p-2 text-white hover:cursor-pointer hover:opacity-70"
+          <div className={CLASSNAME_FILED}>
+            <label htmlFor="type">Тип</label>
+            <Field
+              as="select"
+              id="type"
+              name="type"
+              className="rounded-lg border border-gray-300 p-2"
             >
-              {editedIndex !== null ? "Редагувати захід" : "Додати захід"}
-            </button>
-          </Form>
-        </Formik>
-      )}
+              <option value="" disabled hidden>
+                -- Оберіть тип моніторингу --
+              </option>
+              <option value={MonitoringSubsystem.RADIATION_BACKGROUND}>
+                Радіаційний фон
+              </option>
+              <option value={MonitoringSubsystem.AIR_CONDITION}>
+                Стан повітря
+              </option>
+            </Field>
+            <ErrorMessage
+              name="type"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASSNAME_FILED}>
+            <label htmlFor="company">Підприємство</label>
+            <Field
+              as="select"
+              id="company"
+              name="company"
+              className="rounded-lg border border-gray-300 p-2"
+            >
+              <option value="" disabled hidden>
+                -- Оберіть підприємство --
+              </option>
+              {INDUSTRIAL_FACILITIES_LAB_3.map(({ id, slug, name }) => (
+                <option key={id} value={slug}>
+                  {name}
+                </option>
+              ))}
+            </Field>
+            <ErrorMessage
+              name="company"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASSNAME_FILED}>
+            <label htmlFor="amount">Сума</label>
+            <Field
+              id="amount"
+              name="amount"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="amount"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASSNAME_FILED}>
+            <label htmlFor="date">Дата проведення</label>
+            <Field
+              type="date"
+              id="date"
+              name="date"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="date"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASSNAME_FILED}>
+            <label htmlFor="effect">Ефект</label>
+            <Field
+              id="effect"
+              name="effect"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="effect"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASSNAME_FILED}>
+            <label htmlFor="source">Джерело</label>
+            <Field
+              id="source"
+              name="source"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="source"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <div className={CLASSNAME_FILED}>
+            <label htmlFor="executor">Виконавець</label>
+            <Field
+              id="executor"
+              name="executor"
+              className="rounded-lg border border-gray-300 p-2"
+            />
+            <ErrorMessage
+              name="executor"
+              component="div"
+              className="text-red-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="col-span-1 mt-4 rounded-lg bg-blue-500 p-2 text-white hover:cursor-pointer hover:opacity-70"
+          >
+            {editedIndex !== null ? "Редагувати захід" : "Додати захід"}
+          </button>
+        </Form>
+      </Formik>
     </section>
   );
 };
