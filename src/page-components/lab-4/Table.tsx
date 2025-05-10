@@ -37,7 +37,8 @@ export const Table = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(ecoMeasures));
   }, [ecoMeasures]);
 
-  const { getQueryParam, setQueryParam } = useQueryParams();
+  const { getQueryParam, setQueryParam, setMultipleQueryParams } =
+    useQueryParams();
 
   const activeCompany =
     ALL_COMPANIES.find(
@@ -56,6 +57,13 @@ export const Table = () => {
 
   const setActiveType = (option: IOptionSelect) => {
     setQueryParam(QueryParamKeys.TYPE_MONITORING, option.value);
+  };
+
+  const handlResetFilter = () => {
+    setMultipleQueryParams({
+      [QueryParamKeys.TYPE_MONITORING]: TYPE_MONITORING[0].value,
+      [QueryParamKeys.COMPANY]: ALL_COMPANIES[0].value,
+    });
   };
 
   const visibleEcoMeasures = ecoMeasures.filter((measure) => {
@@ -132,6 +140,13 @@ export const Table = () => {
           activeOption={activeType}
           setOption={setActiveType}
         />
+
+        <button
+          className="flex items-center gap-4 rounded-xl border border-gray-200 bg-white px-3.5 py-2 text-lg hover:cursor-pointer"
+          onClick={handlResetFilter}
+        >
+          Скинути фільтри
+        </button>
       </div>
 
       <div className="rounded-xl border border-gray-400">
